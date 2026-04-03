@@ -124,9 +124,9 @@
         #dashboardView { flex-direction: row; }
 
         .sidebar { 
-            width: 280px; background: rgba(10, 12, 16, 0.8); backdrop-filter: blur(20px);
+            width: 280px; background: rgba(10, 12, 16, 0.95); backdrop-filter: blur(20px);
             border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; 
-            padding: 30px 20px; z-index: 10; 
+            padding: 30px 20px; z-index: 100; transition: 0.3s ease;
         }
         .logo { font-size: 26px; font-weight: 700; color: #fff; padding-bottom: 40px; padding-left: 10px; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
         .logo i { color: var(--accent-primary); font-size: 22px; }
@@ -146,6 +146,12 @@
         }
         .nav-item.active i { color: var(--accent-primary); opacity: 1; }
 
+        /* Mobile Overlay */
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.6); z-index: 90; backdrop-filter: blur(3px);
+        }
+
         .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         
         .header { 
@@ -153,6 +159,10 @@
             padding: 0 40px; gap: 30px; border-bottom: 1px solid var(--glass-border);
             background: rgba(10, 12, 16, 0.4); backdrop-filter: blur(10px); z-index: 5;
         }
+        
+        /* Mobile Menu Button (Hidden on Desktop) */
+        .mobile-menu-btn { display: none; font-size: 24px; color: #fff; cursor: pointer; margin-right: auto; }
+
         .stat-badge { display: flex; flex-direction: column; align-items: flex-end; }
         .stat-badge .val { font-weight: 600; font-size: 16px; color: #fff; letter-spacing: 0.5px; }
         .stat-badge .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -212,7 +222,7 @@
         .service-details li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #cbd5e1; }
         .service-details i { 
             display: flex; align-items: center; justify-content: center; width: 28px; height: 28px;
-            background: rgba(99, 102, 241, 0.1); color: var(--accent-primary); border-radius: 6px; font-size: 12px;
+            background: rgba(99, 102, 241, 0.1); color: var(--accent-primary); border-radius: 6px; font-size: 12px; flex-shrink: 0;
         }
 
         .charge-display { 
@@ -232,50 +242,77 @@
 
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 16px 20px; color: var(--text-muted); font-size: 12px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid var(--glass-border); }
-        td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 14px; color: #e2e8f0; }
+        th { padding: 16px 20px; color: var(--text-muted); font-size: 12px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
+        td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 14px; color: #e2e8f0; white-space: nowrap; }
         .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
         .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
         .status-completed { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
         .status-completed::before { background: var(--success); }
 
         .grid-2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
-        @media (max-width: 900px) { .grid-2, .login-container { grid-template-columns: 1fr; } }
 
         /* =========================================
            3. FLOATING WHATSAPP ICON
            ========================================= */
         .whatsapp-float {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 40px;
-            right: 40px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 0px 4px 15px rgba(37, 211, 102, 0.4);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            animation: float 3s ease-in-out infinite;
-            transition: all 0.3s ease;
+            position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px;
+            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center;
+            font-size: 30px; box-shadow: 0px 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 100; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; animation: float 3s ease-in-out infinite; transition: all 0.3s ease;
         }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            background-color: #1ebe57;
-            box-shadow: 0px 6px 20px rgba(37, 211, 102, 0.6);
-        }
+        .whatsapp-float:hover { transform: scale(1.1); background-color: #1ebe57; box-shadow: 0px 6px 20px rgba(37, 211, 102, 0.6); }
 
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
+        }
+
+        /* =========================================
+           MOBILE RESPONSIVENESS (100% FOCUS)
+           ========================================= */
+        @media (max-width: 900px) {
+            .grid-2, .login-container { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            /* Login Mobile Fixes */
+            .login-header { padding: 15px 20px; }
+            .login-nav a:not(.highlight) { display: none; } /* Hide extra links on mobile */
+            .hero-text h1 { font-size: 32px; }
+            .login-container { padding: 30px 20px; gap: 20px; }
+            .auth-card { padding: 25px 20px; }
+
+            /* Dashboard Header & Sidebar Fixes */
+            .mobile-menu-btn { display: block; }
+            .header { padding: 0 20px; gap: 15px; }
+            .stat-badge:first-child { display: none; } /* Hide total orders to save space, keep balance */
+            .user-profile { padding-left: 15px; }
+            
+            .sidebar { 
+                position: fixed; top: 0; left: -100%; height: 100vh; 
+                box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+            }
+            .sidebar.show { left: 0; }
+            .sidebar-overlay.show { display: block; }
+
+            /* Content & Typography Fixes */
+            .content { padding: 20px; }
+            .page-title { font-size: 24px; }
+            .card { padding: 20px; margin-bottom: 20px; }
+            .form-group label { font-size: 12px; }
+            .form-control { padding: 12px 15px; font-size: 14px; }
+            
+            /* Service Details Mobile Grid */
+            .service-details ul { grid-template-columns: 1fr; gap: 10px; }
+            
+            /* Total Price Box Mobile */
+            .charge-display { flex-direction: column; align-items: flex-start; gap: 5px; padding: 15px; }
+            .charge-display strong { font-size: 24px; }
+            
+            /* WhatsApp Icon Mobile */
+            .whatsapp-float { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 24px; }
         }
     </style>
 </head>
@@ -296,9 +333,9 @@
         <main class="login-container">
             <div class="hero-text">
                 <span class="hero-badge">Advance SMM Panel #1</span>
-                <h1 style="margin-top: 20px;">The best <span>SMM</span> Panel.<br>Super cheap & FAST!</h1>
+                <h1 style="margin-top: 15px;">The best <span>SMM</span> Panel.<br>Super cheap & FAST!</h1>
                 <p>Boost Your Social Media Presence securely with the world's leading high-end automated systems. Join 10,000+ creators and agencies.</p>
-                <div style="display: flex; gap: 15px;">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                     <div style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-check-circle" style="color: var(--success);"></i> Non-Drop Guarantee</div>
                     <div style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-bolt" style="color: #fbbf24;"></i> Instant Delivery</div>
                 </div>
@@ -347,7 +384,10 @@
     </div>
 
     <div id="dashboardView" class="app-view">
-        <aside class="sidebar">
+        
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <aside class="sidebar" id="sidebar">
             <div class="logo"><i class="fa-solid fa-chart-line"></i> DmFame.</div>
             <div class="nav-items">
                 <a class="nav-item active" onclick="switchPage('newOrder', this)"><i class="fa-solid fa-layer-group"></i> New Order</a>
@@ -361,6 +401,8 @@
 
         <main class="main-wrapper">
             <header class="header">
+                <i class="fa-solid fa-bars mobile-menu-btn" onclick="toggleSidebar()"></i>
+                
                 <div class="stat-badge"><span class="val">19,917</span><span class="lbl">Total Orders</span></div>
                 <div class="stat-badge"><span class="val" style="color: var(--success);">₹ 0.00</span><span class="lbl">Balance</span></div>
                 <div class="user-profile">
@@ -493,15 +535,30 @@
             loginView.classList.add('active');
         }
 
-        // --- 2. DASHBOARD NAVIGATION LOGIC ---
+        // --- 2. MOBILE SIDEBAR LOGIC ---
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('show');
+            sidebarOverlay.classList.toggle('show');
+        }
+
+        // --- 3. DASHBOARD NAVIGATION LOGIC ---
         function switchPage(pageId, navElement) {
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             navElement.classList.add('active');
+            
+            // Auto close sidebar on mobile after clicking a link
+            if(window.innerWidth <= 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+            }
         }
 
-        // --- 3. EXPANDED SMM SERVICES DATABASE ---
+        // --- 4. EXPANDED SMM SERVICES DATABASE ---
         const db = {
             instagram: [
                 { id: 101, name: "Instagram Followers (Premium & Non-Drop) 💎", price: 176.71, min: 100, max: 600000, start: "Instant", speed: "10K/Day", drop: "0%", refill: "Lifetime ♻️" },
