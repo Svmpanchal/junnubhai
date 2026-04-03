@@ -1,179 +1,599 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
-
-<!-- Mirrored from slimhamdi.net/tunis/dark/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 May 2023 03:36:13 GMT -->
 <head>
-    <meta charset="utf-8">
-    <title>Tunis - Personal Portfolio</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DmFame | Premium SMM Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- CORE VARIABLES --- */
+        :root {
+            --bg-base: #0a0c10;
+            --accent-primary: #6366f1;
+            --accent-secondary: #ec4899;
+            --glass-bg: rgba(17, 24, 39, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(255, 255, 255, 0.03);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    <!-- Template Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700" rel="stylesheet">
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-    <!-- Template CSS Files -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/preloader.min.css" rel="stylesheet">
-    <link href="css/circle.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/fm.revealator.jquery.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+        body { 
+            background-color: var(--bg-base); color: var(--text-main); 
+            height: 100vh; overflow: hidden; position: relative;
+        }
 
-    <!-- CSS Skin File -->
-    <link href="css/skins/yellow.css" rel="stylesheet">
+        /* Abstract Glowing Orbs in Background */
+        body::before {
+            content: ''; position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(60px); z-index: -1;
+        }
+        body::after {
+            content: ''; position: absolute; bottom: -10%; right: -10%; width: 40vw; height: 40vw;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(60px); z-index: -1;
+        }
 
-    <!-- Live Style Switcher - demo only -->
-    <link rel="alternate stylesheet" type="text/css" title="blue" href="css/skins/blue.css" />
-    <link rel="alternate stylesheet" type="text/css" title="green" href="css/skins/green.css" />
-    <link rel="alternate stylesheet" type="text/css" title="yellow" href="css/skins/yellow.css" />
-    <link rel="alternate stylesheet" type="text/css" title="blueviolet" href="css/skins/blueviolet.css" />
-    <link rel="alternate stylesheet" type="text/css" title="goldenrod" href="css/skins/goldenrod.css" />
-    <link rel="alternate stylesheet" type="text/css" title="magenta" href="css/skins/magenta.css" />
-    <link rel="alternate stylesheet" type="text/css" title="orange" href="css/skins/orange.css" />
-    <link rel="alternate stylesheet" type="text/css" title="purple" href="css/skins/purple.css" />
-    <link rel="alternate stylesheet" type="text/css" title="red" href="css/skins/red.css" />
-    <link rel="alternate stylesheet" type="text/css" title="yellowgreen" href="css/skins/yellowgreen.css" />
-    <link rel="stylesheet" type="text/css" href="css/styleswitcher.css" />
+        /* --- VIEW CONTROLLER --- */
+        .app-view { display: none; height: 100vh; width: 100vw; animation: fadeUp 0.5s ease forwards; }
+        .app-view.active { display: flex; }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
 
-    <!-- Modernizr JS File -->
-    <script src="js/modernizr.custom.js"></script>
+        /* =========================================
+           1. LOGIN PAGE STYLES
+           ========================================= */
+        #loginView { flex-direction: column; overflow-y: auto; }
+        
+        .login-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; border-bottom: 1px solid var(--glass-border);
+            background: rgba(10, 12, 16, 0.4); backdrop-filter: blur(10px);
+        }
+        
+        .login-nav { display: flex; gap: 20px; }
+        .login-nav a { 
+            color: var(--text-muted); text-decoration: none; font-size: 14px; 
+            font-weight: 500; transition: var(--transition); display: flex; align-items: center; gap: 6px;
+        }
+        .login-nav a:hover { color: #fff; }
+        .login-nav a.highlight { color: var(--accent-secondary); }
+
+        .login-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            max-width: 1200px; margin: 0 auto; padding: 60px 5%; align-items: center; flex: 1;
+        }
+
+        .hero-text h1 { font-size: 42px; line-height: 1.2; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero-text h1 span { color: var(--accent-primary); text-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+        .hero-text p { font-size: 18px; color: var(--text-muted); margin-bottom: 30px; font-weight: 400; }
+        .hero-badge {
+            display: inline-block; padding: 8px 16px; background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 20px; color: #a5b4fc; font-size: 13px;
+        }
+
+        .auth-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg); padding: 40px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .auth-card label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; }
+        .auth-card .input-field {
+            width: 100%; padding: 14px 18px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md); color: #fff; margin-bottom: 20px; outline: none; transition: var(--transition);
+        }
+        .auth-card .input-field:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        
+        .pw-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+        .pw-header a { font-size: 12px; color: var(--accent-secondary); text-decoration: none; }
+        
+        .remember-me { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+        
+        .btn-login {
+            width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent-primary), #818cf8);
+            color: white; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 15px;
+            cursor: pointer; transition: var(--transition);
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgba(99,102,241,0.6); }
+
+        .btn-google {
+            width: 100%; padding: 14px; background: #fff; color: #0f172a; border: none; border-radius: var(--radius-md);
+            font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
+            margin-top: 15px; transition: var(--transition);
+        }
+        .btn-google:hover { background: #f8fafc; transform: translateY(-1px); }
+        .google-icon { width: 18px; height: 18px; }
+
+        .signup-text { text-align: center; margin-top: 24px; font-size: 13px; color: var(--text-muted); }
+        .signup-text a { color: var(--text-main); font-weight: 600; text-decoration: none; }
+
+        /* =========================================
+           2. DASHBOARD STYLES
+           ========================================= */
+        #dashboardView { flex-direction: row; }
+
+        .sidebar { 
+            width: 280px; background: rgba(10, 12, 16, 0.8); backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; 
+            padding: 30px 20px; z-index: 10; 
+        }
+        .logo { font-size: 26px; font-weight: 700; color: #fff; padding-bottom: 40px; padding-left: 10px; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--accent-primary); font-size: 22px; }
+
+        .nav-items { display: flex; flex-direction: column; gap: 8px; }
+        .nav-item { 
+            display: flex; align-items: center; padding: 14px 18px; color: var(--text-muted); 
+            text-decoration: none; border-radius: var(--radius-md); font-weight: 500; 
+            font-size: 14px; transition: var(--transition); cursor: pointer; border: 1px solid transparent;
+        }
+        .nav-item i { width: 22px; font-size: 16px; opacity: 0.7; transition: var(--transition); }
+        .nav-item:hover { background: var(--glass-hover); color: #fff; border-color: var(--glass-border); }
+        .nav-item:hover i { opacity: 1; transform: translateX(2px); }
+        .nav-item.active { 
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.1), transparent); 
+            color: #fff; border: 1px solid var(--glass-border); border-left: 3px solid var(--accent-primary);
+        }
+        .nav-item.active i { color: var(--accent-primary); opacity: 1; }
+
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        
+        .header { 
+            height: 80px; display: flex; justify-content: flex-end; align-items: center; 
+            padding: 0 40px; gap: 30px; border-bottom: 1px solid var(--glass-border);
+            background: rgba(10, 12, 16, 0.4); backdrop-filter: blur(10px); z-index: 5;
+        }
+        .stat-badge { display: flex; flex-direction: column; align-items: flex-end; }
+        .stat-badge .val { font-weight: 600; font-size: 16px; color: #fff; letter-spacing: 0.5px; }
+        .stat-badge .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .user-profile { 
+            display: flex; align-items: center; gap: 12px; padding-left: 30px; 
+            border-left: 1px solid var(--glass-border); cursor: pointer;
+        }
+        .avatar { 
+            width: 40px; height: 40px; border-radius: 50%; 
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .content { flex: 1; overflow-y: auto; padding: 40px; }
+        .content::-webkit-scrollbar { width: 6px; }
+        .content::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        
+        .page-section { display: none; animation: blurFadeIn 0.4s ease forwards; opacity: 0; filter: blur(4px); }
+        .page-section.active { display: block; }
+        @keyframes blurFadeIn { to { opacity: 1; filter: blur(0); transform: translateY(0); } from { transform: translateY(10px); } }
+
+        .page-header { margin-bottom: 30px; }
+        .page-title { font-size: 28px; font-weight: 600; color: #fff; letter-spacing: -0.5px; }
+        .page-subtitle { color: var(--text-muted); font-size: 14px; margin-top: 5px; }
+
+        .card { 
+            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg); border: 1px solid var(--glass-border); 
+            padding: 30px; margin-bottom: 24px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+        
+        .form-group { margin-bottom: 24px; position: relative; }
+        .form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; }
+        .form-control { 
+            width: 100%; padding: 15px 20px; background: rgba(0, 0, 0, 0.2); 
+            border: 1px solid var(--glass-border); border-radius: var(--radius-md); 
+            font-size: 15px; color: #fff; transition: var(--transition); outline: none;
+        }
+        .form-control:focus { border-color: var(--accent-primary); background: rgba(0, 0, 0, 0.4); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        .form-control:disabled { background: rgba(255, 255, 255, 0.02); color: #475569; cursor: not-allowed; }
+
+        select.form-control { 
+            appearance: none; cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); 
+            background-repeat: no-repeat; background-position: right 16px center; background-size: 16px; 
+        }
+        select.form-control option { background: #0f172a; color: #fff; }
+
+        .service-details { 
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); 
+            border: 1px solid var(--glass-border); border-radius: var(--radius-md); 
+            padding: 20px; margin-top: 15px; display: none;
+        }
+        .service-details ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .service-details li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #cbd5e1; }
+        .service-details i { 
+            display: flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+            background: rgba(99, 102, 241, 0.1); color: var(--accent-primary); border-radius: 6px; font-size: 12px;
+        }
+
+        .charge-display { 
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); 
+            padding: 20px 24px; border-radius: var(--radius-md); margin-top: 10px; 
+        }
+        .charge-display span { font-size: 13px; color: var(--text-muted); text-transform: uppercase; }
+        .charge-display strong { font-size: 28px; color: #fff; text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
+
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--accent-primary), #818cf8); color: white; 
+            width: 100%; margin-top: 24px; box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.6);
+            padding: 16px 24px; border-radius: var(--radius-md); font-weight: 600; font-size: 15px; border: none; cursor: pointer; transition: var(--transition);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 25px -10px rgba(99, 102, 241, 0.8); }
+
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 16px 20px; color: var(--text-muted); font-size: 12px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid var(--glass-border); }
+        td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 14px; color: #e2e8f0; }
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+        .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+        .status-completed { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .status-completed::before { background: var(--success); }
+
+        .grid-2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .grid-2, .login-container { grid-template-columns: 1fr; } }
+
+        /* =========================================
+           3. FLOATING WHATSAPP ICON
+           ========================================= */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0px 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            animation: float 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #1ebe57;
+            box-shadow: 0px 6px 20px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
 </head>
+<body>
 
-<body class="home">
-<!-- Live Style Switcher Starts - demo only -->
-<div id="switcher" class="">
-    <div class="content-switcher">
-        <h4>STYLE SWITCHER</h4>
-        <ul>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('purple');" title="purple" class="color"><img src="img/styleswitcher/purple.png" alt="purple"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('red');" title="red" class="color"><img src="img/styleswitcher/red.png" alt="red"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('blueviolet');" title="blueviolet" class="color"><img src="img/styleswitcher/blueviolet.png" alt="blueviolet"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('blue');" title="blue" class="color"><img src="img/styleswitcher/blue.png" alt="blue"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('goldenrod');" title="goldenrod" class="color"><img src="img/styleswitcher/goldenrod.png" alt="goldenrod"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('magenta');" title="magenta" class="color"><img src="img/styleswitcher/magenta.png" alt="magenta"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('yellowgreen');" title="yellowgreen" class="color"><img src="img/styleswitcher/yellowgreen.png" alt="yellowgreen"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('orange');" title="orange" class="color"><img src="img/styleswitcher/orange.png" alt="orange"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('green');" title="green" class="color"><img src="img/styleswitcher/green.png" alt="green"/></a>
-            </li>
-            <li>
-                <a href="#" onclick="setActiveStyleSheet('yellow');" title="yellow" class="color"><img src="img/styleswitcher/yellow.png" alt="yellow"/></a>
-            </li>
-        </ul>
-        <a href="https://themeforest.net/item/tunis-personal-portfolio/26761598?irgwc=1&amp;clickid=UBs0rDX6YxyJWfewUx0Mo3E1UkiwozXD10XATw0&amp;iradid=275988&amp;irpid=1327395&amp;iradtype=ONLINE_TRACKING_LINK&amp;irmptype=mediapartner&amp;mp_value1=&amp;utm_campaign=af_impact_radius_1327395&amp;utm_medium=affiliate&amp;utm_source=impact_radius" class="waves-effect waves-light font-weight-700 purchase"><i class="fa fa-shopping-cart"></i> Purchase</a>
-        <div id="hideSwitcher">&times;</div>
-    </div>
-</div>
-<div id="showSwitcher" class="styleSecondColor"><i class="fa fa-cog fa-spin"></i></div>
-<!-- Live Style Switcher Ends - demo only -->
-<!-- Header Starts -->
-<header class="header" id="navbar-collapse-toggle">
-    <!-- Fixed Navigation Starts -->
-    <ul class="icon-menu d-none d-lg-block revealator-slideup revealator-once revealator-delay1">
-        <li class="icon-box active">
-            <i class="fa fa-home"></i>
-            <a href="index.html">
-                <h2>Home</h2>
-            </a>
-        </li>
-        <li class="icon-box">
-            <i class="fa fa-user"></i>
-            <a href="about.html">
-                <h2>About</h2>
-            </a>
-        </li>
-        <li class="icon-box">
-            <i class="fa fa-briefcase"></i>
-            <a href="portfolio.html">
-                <h2>Portfolio</h2>
-            </a>
-        </li>
-        <li class="icon-box">
-            <i class="fa fa-envelope-open"></i>
-            <a href="contact.html">
-                <h2>Contact</h2>
-            </a>
-        </li>
-        <!-- <li class="icon-box">
-            <i class="fa fa-comments"></i>
-            <a href="blog.html">
-                <h2>Blog</h2>
-            </a>
-        </li> -->
-    </ul>
-    <!-- Fixed Navigation Ends -->
-    <!-- Mobile Menu Starts -->
-    <nav role="navigation" class="d-block d-lg-none">
-        <div id="menuToggle">
-            <input type="checkbox" />
-            <span></span>
-            <span></span>
-            <span></span>
-            <ul class="list-unstyled" id="menu">
-                <li class="active"><a href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
-                <li><a href="about.html"><i class="fa fa-user"></i><span>About</span></a></li>
-                <li><a href="portfolio.html"><i class="fa fa-folder-open"></i><span>Portfolio</span></a></li>
-                <li><a href="contact.html"><i class="fa fa-envelope-open"></i><span>Contact</span></a></li>
-                <li><a href="blog.html"><i class="fa fa-comments"></i><span>Blog</span></a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- Mobile Menu Ends -->
-</header>
-<!-- Header Ends -->
-<!-- Main Content Starts -->
-<section class="container-fluid main-container container-home p-0 revealator-slideup revealator-once revealator-delay1">
-    <div class="color-block d-none d-lg-block"></div>
-    <div class="row home-details-container align-items-center">
-        <div class="col-lg-4 bg position-fixed d-none d-lg-block"></div>
-        <div class="col-12 col-lg-8 offset-lg-4 home-details text-left text-sm-center text-lg-left">
-            <div>
-                <img src="img/img-mobile.jpg" class="img-fluid main-img-mobile d-none d-sm-block d-lg-none" alt="my picture" />
-                <h1 class="text-uppercase poppins-font">I'm Shivam Panchal.<span>Graphic designer</span></h1>
-                <p class="open-sans-font">I'm Shivam Panchal Graphic designer & Video Editor .</p>
-                <a class="button" href="about.html">
-                    <span class="button-text">more about me</span>
-                    <span class="button-icon fa fa-arrow-right"></span>
-                </a>
+    <div id="loginView" class="app-view active">
+        <header class="login-header">
+            <div class="logo"><i class="fa-solid fa-chart-line"></i> DmFame.</div>
+            <nav class="login-nav">
+                <a href="#" class="highlight"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                <a href="#"><i class="fa-solid fa-user-plus"></i> Signup</a>
+                <a href="#"><i class="fa-solid fa-code"></i> API</a>
+                <a href="#"><i class="fa-solid fa-list"></i> Services</a>
+                <a href="#"><i class="fa-solid fa-blog"></i> Blogs</a>
+            </nav>
+        </header>
+
+        <main class="login-container">
+            <div class="hero-text">
+                <span class="hero-badge">Advance SMM Panel #1</span>
+                <h1 style="margin-top: 20px;">The best <span>SMM</span> Panel.<br>Super cheap & FAST!</h1>
+                <p>Boost Your Social Media Presence securely with the world's leading high-end automated systems. Join 10,000+ creators and agencies.</p>
+                <div style="display: flex; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-check-circle" style="color: var(--success);"></i> Non-Drop Guarantee</div>
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-bolt" style="color: #fbbf24;"></i> Instant Delivery</div>
+                </div>
             </div>
-        </div>
+
+            <div class="auth-card">
+                <form id="loginForm">
+                    <label>Username or Email</label>
+                    <input type="text" class="input-field" value="admin_demo" placeholder="Enter username" required>
+                    
+                    <div class="pw-header">
+                        <label style="margin-bottom: 0;">Password</label>
+                        <a href="#">Password Lost?</a>
+                    </div>
+                    <input type="password" class="input-field" value="123456" placeholder="Enter password" required>
+                    
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" checked>
+                        <label for="remember" style="margin-bottom: 0;">Remember me for 30 days</label>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="loginBtn">Sign in securely</button>
+                    
+                    <div style="display: flex; align-items: center; margin: 20px 0;">
+                        <div style="flex: 1; height: 1px; background: var(--glass-border);"></div>
+                        <span style="padding: 0 15px; font-size: 12px; color: var(--text-muted);">OR</span>
+                        <div style="flex: 1; height: 1px; background: var(--glass-border);"></div>
+                    </div>
+
+                    <button type="button" class="btn-google" onclick="executeLogin()">
+                        <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                        Login with Google
+                    </button>
+
+                    <div class="signup-text">
+                        Don't have an account? <a href="#">Signup for free</a>
+                    </div>
+                </form>
+            </div>
+        </main>
     </div>
-</section>
-<!-- Main Content Ends -->
 
-<!-- Template JS Files -->
-<script src="js/jquery-3.5.0.min.js"></script>
-<script src="js/styleswitcher.js"></script>
-<script src="js/preloader.min.js"></script>
-<script src="js/fm.revealator.jquery.min.js"></script>
-<script src="js/imagesloaded.pkgd.min.js"></script>
-<script src="js/masonry.pkgd.min.js"></script>
-<script src="js/classie.js"></script>
-<script src="js/cbpGridGallery.js"></script>
-<script src="js/jquery.hoverdir.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/custom.js"></script>
+    <div id="dashboardView" class="app-view">
+        <aside class="sidebar">
+            <div class="logo"><i class="fa-solid fa-chart-line"></i> DmFame.</div>
+            <div class="nav-items">
+                <a class="nav-item active" onclick="switchPage('newOrder', this)"><i class="fa-solid fa-layer-group"></i> New Order</a>
+                <a class="nav-item" onclick="switchPage('orders', this)"><i class="fa-solid fa-clock-rotate-left"></i> Order History</a>
+                <a class="nav-item" onclick="switchPage('addFunds', this)"><i class="fa-solid fa-wallet"></i> Add Funds</a>
+                <a class="nav-item" onclick="switchPage('api', this)"><i class="fa-solid fa-code"></i> Developer API</a>
+                <a class="nav-item" onclick="switchPage('support', this)"><i class="fa-solid fa-headset"></i> Support Center</a>
+                <a class="nav-item" style="margin-top: auto; color: #ef4444;" onclick="logout()"><i class="fa-solid fa-power-off"></i> Logout</a>
+            </div>
+        </aside>
 
+        <main class="main-wrapper">
+            <header class="header">
+                <div class="stat-badge"><span class="val">19,917</span><span class="lbl">Total Orders</span></div>
+                <div class="stat-badge"><span class="val" style="color: var(--success);">₹ 0.00</span><span class="lbl">Balance</span></div>
+                <div class="user-profile">
+                    <div class="avatar">DG</div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 14px; font-weight: 600; color: #fff;">dgsvm</span>
+                        <span style="font-size: 11px; color: var(--text-muted);">Premium Member</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <section id="newOrder" class="page-section active">
+                    <div class="page-header">
+                        <h1 class="page-title">Initiate Campaign</h1>
+                        <p class="page-subtitle">Select a platform and service to boost your engagement instantly.</p>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <form>
+                                <div class="form-group">
+                                    <label>Target Platform & Category</label>
+                                    <select id="categorySelect" class="form-control" required>
+                                        <option value="" disabled selected>Select social media platform...</option>
+                                        <option value="instagram">Instagram Services 📸</option>
+                                        <option value="youtube">YouTube Services 🎥</option>
+                                        <option value="facebook">Facebook Services 📘</option>
+                                        <option value="twitter">Twitter / X Services 🐦</option>
+                                        <option value="linkedin">LinkedIn Services 💼</option>
+                                        <option value="telegram">Telegram Services ✈️</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Specific Service</label>
+                                    <select id="serviceSelect" class="form-control" disabled required>
+                                        <option value="" disabled selected>Choose platform first...</option>
+                                    </select>
+                                    <div id="serviceDetails" class="service-details"><ul id="detailsList"></ul></div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Target URL / Link</label>
+                                    <input type="url" class="form-control" placeholder="https://..." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Engagement Quantity</label>
+                                    <input type="number" id="quantityInput" class="form-control" placeholder="0" disabled required>
+                                    <small id="minMaxHint" style="color: var(--accent-primary); font-size: 12px; margin-top: 8px; display: block; font-weight: 500;"></small>
+                                </div>
+                                <div class="charge-display">
+                                    <span>Total Investment</span><strong id="totalPrice">₹ 0.00</strong>
+                                </div>
+                                <button type="button" class="btn-primary" onclick="alert('Demo: Order processed successfully!')">Launch Campaign</button>
+                            </form>
+                        </div>
+                        <div>
+                            <div class="card" style="background: linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(0,0,0,0)); border-color: rgba(99, 102, 241, 0.3);">
+                                <h3 style="font-size: 18px; margin-bottom: 15px; color: #fff;">
+                                    <i class="fa-solid fa-shield-check" style="color: var(--success); margin-right: 8px;"></i>Trusted Services
+                                </h3>
+                                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">Our premium infrastructure ensures safe, non-drop delivery for your profiles across all major networks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="orders" class="page-section">
+                    <div class="page-header"><h1 class="page-title">Order History</h1></div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Order ID</th><th>Date</th><th>Target Link</th><th>Charge</th><th>Qty</th><th>Status</th></tr></thead>
+                                <tbody>
+                                    <tr><td style="color: var(--accent-primary);">#23501</td><td>Apr 04, 2026</td><td style="color: var(--text-muted);">ig.com/...</td><td>₹ 176.71</td><td>1,000</td><td><span class="status-badge status-completed">Completed</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="addFunds" class="page-section">
+                    <div class="page-header"><h1 class="page-title">Wallet Recharge</h1></div>
+                    <div class="card"><p style="color: var(--text-muted);">Secure payment gateway integration goes here.</p></div>
+                </section>
+
+                <section id="api" class="page-section">
+                    <div class="page-header"><h1 class="page-title">Developer API</h1></div>
+                    <div class="card"><p style="color: var(--text-muted);">API Documentation details.</p></div>
+                </section>
+
+                <section id="support" class="page-section">
+                    <div class="page-header"><h1 class="page-title">Support Center</h1></div>
+                    <div class="card"><p style="color: var(--text-muted);">Create support tickets here.</p></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // --- 1. LOGIN LOGIC ---
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginView = document.getElementById('loginView');
+        const dashboardView = document.getElementById('dashboardView');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            executeLogin();
+        });
+
+        function executeLogin() {
+            const originalText = loginBtn.innerText;
+            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
+            loginBtn.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                loginView.classList.remove('active');
+                dashboardView.classList.add('active');
+                loginBtn.innerHTML = originalText;
+                loginBtn.style.opacity = '1';
+            }, 1200); 
+        }
+
+        function logout() {
+            dashboardView.classList.remove('active');
+            loginView.classList.add('active');
+        }
+
+        // --- 2. DASHBOARD NAVIGATION LOGIC ---
+        function switchPage(pageId, navElement) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            navElement.classList.add('active');
+        }
+
+        // --- 3. EXPANDED SMM SERVICES DATABASE ---
+        const db = {
+            instagram: [
+                { id: 101, name: "Instagram Followers (Premium & Non-Drop) 💎", price: 176.71, min: 100, max: 600000, start: "Instant", speed: "10K/Day", drop: "0%", refill: "Lifetime ♻️" },
+                { id: 102, name: "Instagram Followers (Indian Mix HQ) 🇮🇳", price: 85.50, min: 50, max: 100000, start: "0-1 Hour", speed: "5K/Day", drop: "Low", refill: "30 Days ♻️" },
+                { id: 103, name: "Instagram Likes (Real Active Users) ❤️", price: 25.00, min: 50, max: 50000, start: "Instant", speed: "Fast", drop: "0%", refill: "No Refill" },
+                { id: 104, name: "Instagram Reel Views (Ultra Fast Explorer) 🚀", price: 5.50, min: 500, max: 10000000, start: "Instant", speed: "1M/Day", drop: "0%", refill: "Guaranteed" },
+                { id: 105, name: "Instagram Custom Comments (High Quality) 💬", price: 250.00, min: 10, max: 10000, start: "5-10 Mins", speed: "Natural", drop: "0%", refill: "Lifetime ♻️" }
+            ],
+            youtube: [
+                { id: 201, name: "YouTube Subscribers (Monetization Safe) 🚀", price: 2150.00, min: 50, max: 300000, start: "1-2 Hours", speed: "100-500/Day", drop: "Non Drop", refill: "30 Days ♻️" },
+                { id: 202, name: "YouTube Views (High Retention for SEO) 👁️", price: 180.00, min: 1000, max: 5000000, start: "0-6 Hours", speed: "10K/Day", drop: "Low", refill: "Lifetime ♻️" },
+                { id: 203, name: "YouTube Likes (Real Human Accounts) 👍", price: 120.00, min: 50, max: 100000, start: "Instant", speed: "Fast", drop: "0%", refill: "30 Days ♻️" },
+                { id: 204, name: "YouTube 4000 Hours Watch Time (Organic) ⏳", price: 3500.00, min: 1000, max: 4000, start: "12-24 Hours", speed: "Stable", drop: "Non Drop", refill: "Guaranteed" },
+                { id: 205, name: "YouTube Shorts Views (Algorithm Boost) 📱", price: 50.00, min: 1000, max: 1000000, start: "Instant", speed: "100K/Day", drop: "0%", refill: "No Refill" }
+            ],
+            facebook: [
+                { id: 301, name: "Facebook Page Likes + Followers (Combo) 📘", price: 250.00, min: 100, max: 100000, start: "0-1 Hour", speed: "2K/Day", drop: "Low", refill: "30 Days ♻️" },
+                { id: 302, name: "Facebook Profile Followers (HQ Global) 👥", price: 190.00, min: 100, max: 50000, start: "1-2 Hours", speed: "5K/Day", drop: "Low", refill: "15 Days ♻️" },
+                { id: 303, name: "Facebook Post/Photo Likes (Indian) 👍", price: 40.00, min: 50, max: 20000, start: "Instant", speed: "Fast", drop: "0%", refill: "Lifetime ♻️" },
+                { id: 304, name: "Facebook Video Views (Monetizable) 📺", price: 110.00, min: 500, max: 1000000, start: "0-1 Hour", speed: "50K/Day", drop: "0%", refill: "Guaranteed" },
+                { id: 305, name: "Facebook Group Members (Active) 🤝", price: 300.00, min: 100, max: 50000, start: "1-6 Hours", speed: "1K/Day", drop: "Medium", refill: "30 Days ♻️" }
+            ],
+            twitter: [
+                { id: 401, name: "Twitter/X Followers (Global Premium HQ) 🐦", price: 350.00, min: 50, max: 50000, start: "0-2 Hours", speed: "1K/Day", drop: "Low", refill: "30 Days ♻️" },
+                { id: 402, name: "Twitter/X Retweets (Organic Look) 🔄", price: 150.00, min: 50, max: 20000, start: "Instant", speed: "Fast", drop: "0%", refill: "Lifetime ♻️" },
+                { id: 403, name: "Twitter/X Likes (Real Accounts) ❤️", price: 130.00, min: 50, max: 50000, start: "Instant", speed: "Fast", drop: "0%", refill: "Lifetime ♻️" },
+                { id: 404, name: "Twitter/X Video Views (Trend Booster) 👁️", price: 30.00, min: 500, max: 1000000, start: "Instant", speed: "100K/Day", drop: "0%", refill: "No Refill" },
+                { id: 405, name: "Twitter/X Impressions + Profile Clicks 📊", price: 80.00, min: 100, max: 100000, start: "0-1 Hour", speed: "Fast", drop: "0%", refill: "Guaranteed" }
+            ],
+            linkedin: [
+                { id: 501, name: "LinkedIn Connections (Premium Profiles) 💼", price: 850.00, min: 50, max: 5000, start: "1-12 Hours", speed: "100/Day", drop: "Non Drop", refill: "Lifetime ♻️" },
+                { id: 502, name: "LinkedIn Followers (Company Page) 🏢", price: 900.00, min: 50, max: 10000, start: "1-6 Hours", speed: "200/Day", drop: "Non Drop", refill: "30 Days ♻️" },
+                { id: 503, name: "LinkedIn Post Likes (Professionals) 👍", price: 450.00, min: 20, max: 5000, start: "0-2 Hours", speed: "Natural", drop: "0%", refill: "Guaranteed" },
+                { id: 504, name: "LinkedIn Skill Endorsements ⭐", price: 600.00, min: 10, max: 1000, start: "1-12 Hours", speed: "Natural", drop: "0%", refill: "Lifetime ♻️" },
+                { id: 505, name: "LinkedIn Custom Comments (Corporate) 💬", price: 1200.00, min: 5, max: 500, start: "2-24 Hours", speed: "Slow/Organic", drop: "0%", refill: "Guaranteed" }
+            ],
+            telegram: [
+                { id: 601, name: "Telegram Channel/Group Members (HQ) ✈️", price: 120.00, min: 100, max: 100000, start: "Instant", speed: "10K/Day", drop: "Low", refill: "30 Days ♻️" },
+                { id: 602, name: "Telegram Post Views (Last 5 Posts) 👁️", price: 15.00, min: 100, max: 500000, start: "Instant", speed: "Super Fast", drop: "0%", refill: "No Refill" },
+                { id: 603, name: "Telegram Post Reactions (Positive Mix) 👍❤️", price: 45.00, min: 50, max: 10000, start: "Instant", speed: "Fast", drop: "0%", refill: "Guaranteed" },
+                { id: 604, name: "Telegram Members (Indian Active) 🇮🇳", price: 180.00, min: 100, max: 50000, start: "0-1 Hour", speed: "5K/Day", drop: "Low", refill: "15 Days ♻️" },
+                { id: 605, name: "Telegram Auto Views (Future 10 Posts) 🤖", price: 150.00, min: 100, max: 50000, start: "Auto", speed: "Instant on Post", drop: "0%", refill: "Guaranteed" }
+            ]
+        };
+
+        const catSelect = document.getElementById('categorySelect');
+        const srvSelect = document.getElementById('serviceSelect');
+        const qtyInput = document.getElementById('quantityInput');
+        const priceDisp = document.getElementById('totalPrice');
+        const hintDisp = document.getElementById('minMaxHint');
+        const detailsBox = document.getElementById('serviceDetails');
+        const detailsList = document.getElementById('detailsList');
+        let currentPrice = 0;
+
+        catSelect.addEventListener('change', (e) => {
+            const cat = e.target.value;
+            srvSelect.innerHTML = '<option value="" disabled selected>Select specific service...</option>';
+            srvSelect.disabled = false;
+            qtyInput.value = ''; qtyInput.disabled = true;
+            hintDisp.textContent = ''; priceDisp.textContent = '₹ 0.00'; detailsBox.style.display = 'none';
+
+            if(db[cat]) {
+                db[cat].forEach(srv => {
+                    const opt = document.createElement('option');
+                    opt.value = srv.id; opt.dataset.info = JSON.stringify(srv);
+                    opt.textContent = `[ID: ${srv.id}] - ${srv.name} - ₹${srv.price.toFixed(2)} / 1K`;
+                    srvSelect.appendChild(opt);
+                });
+            }
+        });
+
+        srvSelect.addEventListener('change', (e) => {
+            const data = JSON.parse(e.target.options[e.target.selectedIndex].dataset.info);
+            currentPrice = data.price;
+            qtyInput.disabled = false; qtyInput.min = data.min; qtyInput.max = data.max; qtyInput.value = data.min;
+            hintDisp.textContent = `Order Limits: Min ${data.min} — Max ${data.max.toLocaleString()}`;
+            detailsList.innerHTML = `
+                <li><i class="fa-solid fa-bolt"></i> <span>Start: <b>${data.start}</b></span></li>
+                <li><i class="fa-solid fa-gauge-high"></i> <span>Speed: <b>${data.speed}</b></span></li>
+                <li><i class="fa-solid fa-shield-halved"></i> <span>Drop: <b>${data.drop}</b></span></li>
+                <li><i class="fa-solid fa-rotate"></i> <span>Guarantee: <b>${data.refill}</b></span></li>
+            `;
+            detailsBox.style.display = 'block';
+            calcTotal();
+        });
+
+        qtyInput.addEventListener('input', calcTotal);
+        function calcTotal() {
+            let qty = parseInt(qtyInput.value);
+            if (isNaN(qty) || qty < 0) qty = 0;
+            priceDisp.textContent = `₹ ${((qty / 1000) * currentPrice).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+    </script>
 </body>
-
-
-<!-- Mirrored from slimhamdi.net/tunis/dark/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 May 2023 03:36:27 GMT -->
 </html>
